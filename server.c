@@ -21,7 +21,7 @@ void initServer()
         perror("Socket error");
         exit(1);
     }
-    
+
     if (setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int)) < 0) {
         
         perror("setsockopt(SO_REUSEADDR) failed");
@@ -77,6 +77,8 @@ void initServer()
         }
     }
 }
+
+
 int main(int argc, char const *argv[]) {
     initServer();
     return 0;

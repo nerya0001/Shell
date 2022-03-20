@@ -9,19 +9,21 @@
 #include "util.h"
 
 
-void listDirCont()
-{
+void listDirCont() {
+
     DIR *dir;
     struct dirent *sd;
     dir = opendir(".");
-    if (dir == NULL)
-    {
+
+    if (dir == NULL) {
+
         printf("%sError! Unable to open directory.\n", RED);
         printf("\033[0m"); // return to normal color
         exit(1);
     }
-    while ((sd = readdir(dir)) != NULL)
-    {
+
+    while ((sd = readdir(dir)) != NULL) {
+
         char *extantion = strrchr(sd->d_name, '.');
         if (!extantion) {
             printf("%s%s  ", RED, sd->d_name);
@@ -47,39 +49,122 @@ void listDirCont()
     return;
 }
 
-void getCurPath()
-{
+void getCurPath() {
+
     char cwd[PATH_MAX];
     
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
         printf("%suser@User: %s%s%s$ ", GREEN, BLUE, cwd, MAGENTA);
         printf("\033[0m"); // return to normal color
-    }
-    else
-    {
+    } else {
         perror("getcwd() error");
         exit(1);
     }
 }
 
-void copySrcToDst(char *src, char *dst)
-{
+void echo(char* buffer) {
+
+    for (int i = 5; i < BUF_SIZE; i++) {
+                printf("%c", buffer[i]);
+            }
+}
+
+void changeDir(char* buffer) {
+
+    char path[BUF_SIZE];
+    bzero(path, BUF_SIZE);
+    int j = 0;
+
+    for (int i = 3; i < strlen(buffer); i++, j++){
+
+        path[j] = buffer[i];
+    }
+
+    chdir(path);
+}
+
+void copySrcToDst(char* buffer) {
+
+    // getting the src and dst
+    char srcFile[BUF_SIZE];
+    char dstFile[BUF_SIZE];
+    bzero(srcFile, BUF_SIZE);
+    bzero(dstFile, BUF_SIZE);
+    int j = 5;
+    int i = 0;
+    // int flag1 = 1;
+    while (buffer[j] != ' ') {
+
+        srcFile[i] = buffer[j];
+        i++;
+        j++;
+    }
+
+    j++;
+    i = 0;
+
+    while (buffer[j] != '\0') {
+
+        dstFile[i] = buffer[j];
+        i++;
+        j++;
+    }
+
     char ch;
-    FILE *fpSrc = fopen(src, "r");
-    FILE *fpDst = fopen(dst, "a");
-    if (fpSrc == NULL || fpDst == NULL)
-    {
-        printf("%sError in copy files\n", RED);
+    FILE *fileSrc = fopen(srcFile, "r");
+    FILE *fileDst = fopen(dstFile, "a");
+    if (fileSrc == NULL || fileDst == NULL) {
+        printf("%sError ocured while copying the files\n", RED);
         printf("\033[0m"); // return to normal color
         exit(1);
     }
-    while ((ch = fgetc(fpSrc)) != EOF)
-    {
-        fputc(ch, fpDst);
+
+    while ((ch = fgetc(fileSrc)) != EOF) {
+        fputc(ch, fileDst);
     }
-    printf("%sFile copied successfully.\n", GREEN);
+
+    printf("%sThe file was successfully copied.\n", GREEN);
     printf("\033[0m"); // return to normal color
-    fclose(fpSrc);
-    fclose(fpDst);
+    fclose(fileSrc);
+    fclose(fileDst);
+}
+
+void del(char* buffer) {
+
+    char path[BUF_SIZE];
+    bzero(path, BUF_SIZE);
+    int j = 0;
+    for (int i = 7; i < strlen(buffer); i++, j++) {
+
+        path[j] = buffer[i];
+    }
+
+    unlink(path);
+
+}
+
+int sysReplacement(char* buffer) {
+
+    // fork a child process
+    int pid = fork();
+    
+    if (pid < 0) {
+
+        // error  
+        return 1;
+        
+    } else if (pid == 0) {
+
+        // child process
+        char p[50] = "/bin/";
+        strcat(p,buffer);
+        execlp(p, buffer, NULL); 
+
+    } else {
+
+        /* parent process */
+        /* parent will wait for the child to complete */
+        wait(NULL);
+    }
+    return 0;
 }

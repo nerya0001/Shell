@@ -8,12 +8,12 @@
 #include <sys/wait.h>
 #include "util.h"
 
-#define BUF_SIZE 20
+
 
 int main()
 {
-    char buffer[BUF_SIZE] = {0};
-    int check;
+    char buffer[BUF_SIZE] = {0}; // buffer for the input
+    int check; // var to check the there was actualy input
 
     getCurPath();
     check = scanf("%[^\n]%*c", buffer); 
@@ -32,11 +32,9 @@ int main()
             getCurPath();
         }
 
-        else if (strncmp(buffer, "ECHO", 4) == 0) {
-
-            for (int i = 5; i < BUF_SIZE; i++) {
-                printf("%c", buffer[i]);
-            }
+        else if (strncmp(buffer, "ECHO", 4) == 0 || strncmp(buffer, "echo", 4) == 0) {
+            
+            echo(buffer);
 
             printf("\n");
             getCurPath();
@@ -45,6 +43,7 @@ int main()
         else if (strncmp(buffer, "DIR", 3) == 0) {
 
             listDirCont();
+
             printf("\n");
             getCurPath();
         }
@@ -57,98 +56,45 @@ int main()
         // change directory to the asked one
         // the comand cddir is a system function  
         else if (strncmp(buffer, "CD", 2) == 0) {
+        // else if (strncmp(buffer, "CD", 2) == 0 || strncmp(buffer, "cd", 2) == 0) {
 
-            char path[BUF_SIZE];
-            bzero(path, BUF_SIZE);
-            int j = 0;
-
-            for (int i = 3; i < strlen(buffer); i++, j++){
-
-                path[j] = buffer[i];
-            }
-
-            chdir(path);
+            changeDir(buffer);
+            
             getCurPath();
         }
 
         
         // fopen, fread, fwrite is libary function.
-        else if (strncmp(buffer, "COPY", 4) == 0) {
+        else if (strncmp(buffer, "COPY", 4) == 0 || strncmp(buffer, "copy", 4) == 0) {
 
-            char srcFile[BUF_SIZE];
-            char dstFile[BUF_SIZE];
-            bzero(srcFile, BUF_SIZE);
-            bzero(dstFile, BUF_SIZE);
-            int j = 5;
-            int i = 0;
-            // int flag1 = 1;
-            while (buffer[j] != ' ') {
+            copySrcToDst(buffer);
 
-                srcFile[i] = buffer[j];
-                i++;
-                j++;
-            }
-
-            j++;
-            i = 0;
-
-            while (buffer[j] != '\0') {
-
-                dstFile[i] = buffer[j];
-                i++;
-                j++;
-            }
-
-            copySrcToDst(srcFile, dstFile);
+            getCurPath();
         }
 
         // unlink of a file is a system function.
-        else if (strncmp(buffer, "DELETE", 6) == 0) {
+        else if (strncmp(buffer, "DELETE", 6) == 0 || strncmp(buffer, "delete", 6) == 0) {
 
-            char path[BUF_SIZE];
-            bzero(path, BUF_SIZE);
-            int j = 0;
-            for (int i = 7; i < strlen(buffer); i++, j++) {
+            del(buffer);
 
-                path[j] = buffer[i];
-            }
-
-            unlink(path);
+            getCurPath();
         }
         
-        // The system() is library function that create a process and getting it to do the work
+        // The system() is library function that create a child process and getting it to do the work
         // alternativly I implemented the state machine my self
-        // to swich between the state machine and the system() you need to uncomment the machine and comment out the system()
-        else if (strlen(buffer) > 0) {
-            // fork a child process 
-            // int pid = fork();
-            // if (pid < 0)
-            // {
-            //     // error  
-            //     return 1;
-            // }
-            // else if (pid == 0)
-            // {
-            //     // child process
-            //     char p[50] = "/bin/";
-            //     strcat(p,input);
-            //     execlp(p, input, NULL); 
-            // }
-            // else
-            // {
-            //     /* parent process */
-            //     /* parent will wait for the child to complete */
-            //     wait(NULL);
-            // }
+        // to swich between the state machine and the system() you need to leave the one you want uncommented.
+        // else if (strlen(buffer) > 0) {
+        else {
             
-            system(buffer);
+            sysReplacement(buffer);
+            // system(buffer);
+
             getCurPath();
             
         }
         
         bzero(buffer, BUF_SIZE);
-        check = scanf("%[^\n]%*c", buffer);
-        
+        check = scanf("%[^\n]%*c", buffer);  
     }
 
     return 0;

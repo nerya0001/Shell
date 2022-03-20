@@ -10,6 +10,7 @@
 #define CYAN  "\x1B[36m"
 #define WHITE  "\x1B[37m"
 
+#define BUF_SIZE 20
 
   // initiate the client code
   void initClient();
@@ -23,7 +24,19 @@
   // get the current working directory
   void getCurPath();
 
+  // echo
+  void echo(char* buffer);
+
+  // cd
+  void changeDir(char* buffer);
+
   // copy a file from src to dst
-  void copySrcToDst(char *src, char *dst);
+  void copySrcToDst(char* buffer);
+
+  // delete file
+  void del(char* buffer);
+
+  // instead of using system()
+  int sysReplacement(char* buffer);
 
   #endif

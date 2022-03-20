@@ -34,26 +34,26 @@ void initClient()
     printf("%sConnected to the server.\n", RED);
     printf("\033[0m"); // return to normal color
     
-    char input[50];
-    bzero(input, 50);
-    scanf("%[^\n]%*c", input);
-    // int len = strlen(input);
+    char inputBuffer[50];
+    bzero(inputBuffer, 50);
+    scanf("%[^\n]%*c", inputBuffer);
+    
 
-    while (strncmp(input, "LOCAL", 5) != 0) {
+    while (strncmp(inputBuffer, "LOCAL", 5) != 0) {
 
         bzero(buffer, 1024);
         for (int i = 0; i < 50; i++) {
-            buffer[i] = input[i];
+            buffer[i] = inputBuffer[i];
         }
 
         send(sock, buffer, strlen(buffer), 0);
-        bzero(input, 50);
-        scanf("%[^\n]%*c", input);
+        bzero(inputBuffer, 50);
+        scanf("%[^\n]%*c", inputBuffer);
     }
 
     bzero(buffer, 1024);
     for (int i = 0; i < 50; i++) {
-        buffer[i] = input[i];
+        buffer[i] = inputBuffer[i];
     }
 
     send(sock, buffer, strlen(buffer), 0);
