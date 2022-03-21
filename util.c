@@ -144,7 +144,10 @@ void del(char* buffer) {
 }
 
 int sysReplacement(char* buffer) {
-
+    
+    // parse the input by " "
+    parse(buffer);
+ 
     // fork a child process
     int pid = fork();
     
@@ -155,10 +158,7 @@ int sysReplacement(char* buffer) {
         
     } else if (pid == 0) {
 
-        // child process
-        char p[50] = "/bin/";
-        strcat(p,buffer);
-        execlp(p, buffer, NULL); 
+        execvp(parbuff[0], parbuff); 
 
     } else {
 
@@ -167,4 +167,16 @@ int sysReplacement(char* buffer) {
         wait(NULL);
     }
     return 0;
+}
+
+void parse(char* buffer) {
+
+    char* pbuff;
+    int i = 0;
+    pbuff = strtok(buffer, " ");
+    while (pbuff != NULL) {
+        parbuff[i++] = pbuff;
+        pbuff = strtok(NULL, " ");
+    }
+
 }

@@ -10,14 +10,15 @@ void initClient()
     char *ip = "127.0.0.1";
     int port = 12345;
 
-    int sock;
+    // int sock;
     struct sockaddr_in addr;
     // socklen_t addr_size;
     char buffer[1024];
     // int n;
 
-    sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0) {
+    // sock = socket(AF_INET, SOCK_STREAM, 0);
+    clientSocket = socket(AF_INET, SOCK_STREAM, 0);
+    if (clientSocket < 0) {
         perror("Socket error");
         exit(1);
     }
@@ -30,32 +31,32 @@ void initClient()
     addr.sin_port = port;
     addr.sin_addr.s_addr = inet_addr(ip);
 
-    connect(sock, (struct sockaddr *)&addr, sizeof(addr));
+    connect(clientSocket, (struct sockaddr *)&addr, sizeof(addr));
     printf("%sConnected to the server.\n", RED);
     printf("\033[0m"); // return to normal color
     
-    char inputBuffer[50];
-    bzero(inputBuffer, 50);
-    scanf("%[^\n]%*c", inputBuffer);
+    // char inputBuffer[50];
+    // bzero(inputBuffer, 50);
+    // scanf("%[^\n]%*c", inputBuffer);
     
 
-    while (strncmp(inputBuffer, "LOCAL", 5) != 0) {
+    // while (strncmp(inputBuffer, "LOCAL", 5) != 0) {
 
-        bzero(buffer, 1024);
-        for (int i = 0; i < 50; i++) {
-            buffer[i] = inputBuffer[i];
-        }
+    //     bzero(buffer, 1024);
+    //     for (int i = 0; i < 50; i++) {
+    //         buffer[i] = inputBuffer[i];
+    //     }
 
-        send(sock, buffer, strlen(buffer), 0);
-        bzero(inputBuffer, 50);
-        scanf("%[^\n]%*c", inputBuffer);
-    }
+    //     send(clientSocket, buffer, strlen(buffer), 0);
+    //     bzero(inputBuffer, 50);
+    //     scanf("%[^\n]%*c", inputBuffer);
+    // }
 
-    bzero(buffer, 1024);
-    for (int i = 0; i < 50; i++) {
-        buffer[i] = inputBuffer[i];
-    }
+    // bzero(buffer, 1024);
+    // for (int i = 0; i < 50; i++) {
+    //     buffer[i] = inputBuffer[i];
+    // }
 
-    send(sock, buffer, strlen(buffer), 0);
-    getCurPath();
+    // send(clientSocket, buffer, strlen(buffer), 0);
+    // getCurPath();
 }

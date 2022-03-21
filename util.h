@@ -12,6 +12,11 @@
 
 #define BUF_SIZE 20
 
+int clientSocket;
+
+char* parbuff[20];
+
+
   // initiate the client code
   void initClient();
 
@@ -38,5 +43,8 @@
 
   // instead of using system()
   int sysReplacement(char* buffer);
+
+  // parse buffer
+  void parse(char* buffer);
 
   #endif

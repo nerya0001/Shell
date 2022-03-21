@@ -20,9 +20,9 @@ int main()
     
     // if nothing was received we need to flush the stdin, so we don't enter an infinite loop
     if (check == 0) {
-            while ( getchar() != '\n' );
-            getCurPath();
-        }
+        while ( getchar() != '\n' );
+        getCurPath();
+    }
         
     while (strcmp(buffer, "EXIT")) {
         
@@ -32,7 +32,7 @@ int main()
             getCurPath();
         }
 
-        else if (strncmp(buffer, "ECHO", 4) == 0 || strncmp(buffer, "echo", 4) == 0) {
+        else if (strncmp(buffer, "ECHO", 4) == 0) {
             
             echo(buffer);
 
@@ -51,6 +51,22 @@ int main()
         else if (strncmp(buffer, "TCP PORT", 8) == 0) {
 
             initClient();
+            dup2(1, 400);
+            dup2(clientSocket, 1);
+        } 
+
+        else if (strncmp(buffer, "LOCAL", 5) == 0) {
+
+            send(clientSocket, buffer, strlen(buffer), 0);
+
+            
+    
+            dup2(400, 1);
+
+            close(clientSocket);
+          
+            getCurPath();
+           
         }
 
         // change directory to the asked one
@@ -85,7 +101,7 @@ int main()
         // to swich between the state machine and the system() you need to leave the one you want uncommented.
         // else if (strlen(buffer) > 0) {
         else {
-            
+           
             sysReplacement(buffer);
             // system(buffer);
 
