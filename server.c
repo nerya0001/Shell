@@ -62,18 +62,17 @@ void initServer()
         }
 
         bzero(buffer, 1024);
-        recv(client_sock, buffer, sizeof(buffer), 0);
-
-        for (int i = 0; i < 1024; i++) {
-            printf("%c",buffer[i]);
-        }
-        printf("\n");
         
-        if (strncmp(buffer, "LOCAL", 5) == 0) {   
+        if (recv(client_sock, buffer, sizeof(buffer), 0) == 0) {
             printf("%sClient disconnected.\n\n", RED);
             printf("\033[0m"); // return to normal color
             close(client_sock);
             flag = 1;
+        }else {
+            for (int i = 0; i < 1024; i++) {
+                printf("%c",buffer[i]);
+            }
+            printf("\n");
         }
     }
 }

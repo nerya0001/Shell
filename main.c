@@ -57,13 +57,8 @@ int main()
 
         else if (strncmp(buffer, "LOCAL", 5) == 0) {
 
-            send(clientSocket, buffer, strlen(buffer), 0);
-
-            
-    
-            dup2(400, 1);
-
             close(clientSocket);
+            dup2(400, 1);
           
             getCurPath();
            
