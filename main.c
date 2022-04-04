@@ -59,7 +59,7 @@ int main()
 
             close(clientSocket);
             dup2(400, 1);
-          
+    
             getCurPath();
            
         }
@@ -76,7 +76,7 @@ int main()
 
         
         // fopen, fread, fwrite is libary function.
-        else if (strncmp(buffer, "COPY", 4) == 0 || strncmp(buffer, "copy", 4) == 0) {
+        else if (strncmp(buffer, "COPY", 4) == 0) {
 
             copySrcToDst(buffer);
 
@@ -84,7 +84,7 @@ int main()
         }
 
         // unlink of a file is a system function.
-        else if (strncmp(buffer, "DELETE", 6) == 0 || strncmp(buffer, "delete", 6) == 0) {
+        else if (strncmp(buffer, "DELETE", 6) == 0) {
 
             del(buffer);
 
@@ -94,7 +94,6 @@ int main()
         // The system() is library function that create a child process and getting it to do the work
         // alternativly I implemented the state machine my self
         // to swich between the state machine and the system() you need to leave the one you want uncommented.
-        // else if (strlen(buffer) > 0) {
         else {
            
             sysReplacement(buffer);

@@ -170,7 +170,7 @@ int sysReplacement(char* buffer) {
 }
 
 void parse(char* buffer) {
-
+    
     char* pbuff;
     int i = 0;
     pbuff = strtok(buffer, " ");
