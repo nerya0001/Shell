@@ -73,7 +73,6 @@ int main()
             
             getCurPath();
         }
-
         
         // fopen, fread, fwrite is libary function.
         else if (strncmp(buffer, "COPY", 4) == 0) {
